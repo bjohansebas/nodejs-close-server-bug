@@ -15,15 +15,24 @@ jobs:
     strategy:
       matrix:
         node-version:
+          - "17.9.1"
+          - "18.0.0"
           - "18.18.0"
           - "18.18.1"
           - "18.18.2"
-          - "19.x"
+          - "19.0.0"
           - "20.x"
+        fetch-type:
+          - native
+          - library
+          - request
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npm ci
       - run: node index.mjs
+        env:
+          FETCH_TYPE: ${{ matrix.fetch-type }}
